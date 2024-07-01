@@ -41,7 +41,7 @@ init_cov3 = np.diag([10.0, 10.0, 0.5, 0.25])
 init_lambda = 0.5
 #量测边界为ranges  检测概率P_D=0.9  生成杂波的泊松分布的系数为clutter_lambda=1.0
 volume = CartesianVolume(
-    ranges = np.array([[-1200.0, 1200.0], [-1200.0, 1200.0]]),
+    ranges = np.array([[-600.0, 600.0], [-600.0, 600.0]]),
     P_D=0.95,
     clutter_lambda = 10,
     init_lambda = init_lambda
@@ -59,20 +59,21 @@ Init_Stat3 = np.random.multivariate_normal(init_mean3, init_cov3)
 targetNum = 200
 Init_Stat_list = []
 for i in range(targetNum):
-    init_mean_temp = np.array([np.random.uniform((-1)*800, (-1)*800), np.random.uniform((-1)*600, (-1)*500), np.random.uniform(0.1, 1), np.random.uniform(0.1, 1)])
-    init_cov_temp = np.diag([10.0, 15.0, 0.50, 0.25])
+    init_mean_temp = np.array([np.random.uniform((-1)*30, (-1)*20), np.random.uniform((-1)*30, (-1)*20), np.random.uniform(0.004, 0.005), np.random.uniform(0.004, 0.005)])
+    init_cov_temp = np.diag([5.0, 5.0, 0.20, 0.25])
     Init_Stat_temp = np.random.multivariate_normal(init_mean_temp, init_cov_temp)
     Init_Stat_list.append(Init_Stat_temp)
 
 Init_time = np.random.randint(1, 200, targetNum)
-Death_time = Init_time + np.random.randint(50, 800, targetNum)
+# Death_time = Init_time + np.random.randint(50, 800, targetNum)
+Death_time = [500 for _ in range(targetNum)]
 
 """ M.C. """
 for i in range(nof_rounds):
     """Get tracker,ground_truth and measurements"""
-    end_time_eachMC = 1000
+    end_time_eachMC = 500
     tracker = Tracker(
-        max_nof_hyps = 10,
+        max_nof_hyps = 6,
         hyp_weight_threshold = np.log(0.05),
     )#跟踪器:_M=10,即m-best为10; 假设的权重阈值为ln(0.05)
     #P_survival: the const. prob. is used to model the object death time,i.e survival time.
