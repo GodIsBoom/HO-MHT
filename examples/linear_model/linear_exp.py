@@ -107,15 +107,15 @@ for i in range(nof_rounds):
         estimations.append(tracker.process(detections, volume, targetmodel, t_now))#Track and record
         #tracker.debug_print(t)
     """End Tracking"""
-    print(estimations)
+    # print(estimations)
     calc_time.append(time.time()-tic)#记录跟踪的时间
     # get the track state=>{trid:xk}
     track_states = [
         {trid: density.x for trid, density in est.items()}
         for est in estimations
     ]
-    print(ground_truth[6])
-    print(track_states[6])
+    # print(ground_truth[6])
+    # print(track_states[6])
     """OPSA metric"""
     assert(len(track_states)==len(ground_truth))
     runtimes = len(track_states)
