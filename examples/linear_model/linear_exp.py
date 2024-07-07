@@ -41,9 +41,9 @@ init_cov3 = np.diag([10.0, 10.0, 0.5, 0.25])
 init_lambda = 0.5
 #量测边界为ranges  检测概率P_D=0.9  生成杂波的泊松分布的系数为clutter_lambda=1.0
 volume = CartesianVolume(
-    ranges = np.array([[-1200.0, 1200.0], [-1200.0, 1200.0]]),
+    ranges = np.array([[-600.0, 600.0], [-600.0, 600.0]]),
     P_D=0.95,
-    clutter_lambda = 10,
+    clutter_lambda = 3,
     init_lambda = init_lambda
 )
 calc_time = list()#Record the total tracking time
@@ -56,21 +56,23 @@ nof_rounds = 1#Monte Carlo
 Init_Stat = np.random.multivariate_normal(init_mean, init_cov)
 Init_Stat2 = np.random.multivariate_normal(init_mean2, init_cov2)
 Init_Stat3 = np.random.multivariate_normal(init_mean3, init_cov3)
-targetNum = 200
+targetNum = 5
+simEndTime = 500
 Init_Stat_list = []
 for i in range(targetNum):
-    init_mean_temp = np.array([np.random.uniform((-1)*800, (-1)*800), np.random.uniform((-1)*600, (-1)*500), np.random.uniform(0.1, 1), np.random.uniform(0.1, 1)])
-    init_cov_temp = np.diag([10.0, 15.0, 0.50, 0.25])
+    init_mean_temp = np.array([np.random.uniform((-1)*30, (-1)*20), np.random.uniform((-1)*30, (-1)*20), np.random.uniform(0.004, 0.005), np.random.uniform(0.004, 0.005)])
+    init_cov_temp = np.diag([5.0, 5.0, 0.1, 0.1])
     Init_Stat_temp = np.random.multivariate_normal(init_mean_temp, init_cov_temp)
     Init_Stat_list.append(Init_Stat_temp)
 
-Init_time = np.random.randint(1, 200, targetNum)
-Death_time = Init_time + np.random.randint(50, 800, targetNum)
+Init_time = np.random.randint(0, 20, targetNum)
+# Death_time = Init_time + np.random.randint(450, 480, targetNum)
+Death_time = [simEndTime for i in range(targetNum)]
 
 """ M.C. """
 for i in range(nof_rounds):
     """Get tracker,ground_truth and measurements"""
-    end_time_eachMC = 1000
+    end_time_eachMC = simEndTime
     tracker = Tracker(
         max_nof_hyps = 10,
         hyp_weight_threshold = np.log(0.05),
