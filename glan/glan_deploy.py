@@ -4,7 +4,7 @@ import torch
 import os
 import numpy as np
 from torch_geometric.data import Data,Dataset
-from torch_geometric.data import DataLoader
+from torch_geometric.loader import DataLoader
 
 from GNBlock import _Model
 
@@ -23,7 +23,7 @@ class Adap_TopK_Graph(torch.nn.Module):
         k = min(row_size, 10 + self.step * int(row_size / 10))
 
         idx_knn=self.knn_idx(distance_matrix,k).reshape(-1,1)
-        idx_row=torch.range(0,row_size-1).view(-1,1).repeat(1,k).reshape(-1,1)
+        idx_row=torch.arange(0,row_size).view(-1,1).repeat(1,k).reshape(-1,1)
         idx_row=idx_row.type(torch.int64)
 
         edge_index=torch.cat((idx_row,idx_knn+row_size),dim=1).type(torch.long)
@@ -68,18 +68,19 @@ def sinkhorn_v1_np(mat):
     return mat
 
 class MatrixRealData(Dataset):
-  'Characterizes a dataset for PyTorch'
+    'Characterizes a dataset for PyTorch'
 
-  def __init__(self, data_in, n_step = 2):
-      super(MatrixRealData, self).__init__()#Initialization
-      self.data = data_in
-      self.transor = Adap_TopK_Graph(step=n_step)
+    def __init__(self, data_in, n_step = 2):
+        super(MatrixRealData, self).__init__()#Initialization
+        self.data = data_in
+        self.transor = Adap_TopK_Graph(step=n_step)
+        self.size = 1
 
-  def __len__(self):
+    def __len__(self):
         'Denotes the total number of samples'
-        return 1
+        return self.size
 
-  def __getitem__(self, index):
+    def __getitem__(self, index):
         'Generates one sample of data'
 
         # Load data and get label
@@ -92,6 +93,13 @@ class MatrixRealData(Dataset):
         matrix_target = self.transor(matrix, target)
 
         return matrix,target,matrix_target
+    def len(self) -> int:
+        r"""Returns the number of graphs stored in the dataset."""
+        return 1
+
+    def get(self, idx: int):
+        r"""Gets the data object at index :obj:`idx`."""
+        return None
 
 class GLAN4MHT():
     def __init__(self) -> None:
@@ -109,7 +117,7 @@ class GLAN4MHT():
 
         # 获取第一个批次
         cur_data = next(loader_iter)
-        print(cur_data)
+        # print(cur_data)
         matrix, target,Dt_target = cur_data
 
         shapes_info=Dt_target.kwargs[0]
