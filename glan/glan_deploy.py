@@ -147,12 +147,14 @@ class GLAN4MHT():
         rows, cols = np.where(prediction == 1)
         return rows, cols
 
-def unit_test():
-    glan = GLAN4MHT()
-    mat = np.array([[0, 1, 3],
-                    [1, 2, 1],
-                    [3, 0, 1]])
-    rows, cols = glan.infer(mat)
-    print(rows, cols)
 
-unit_test()
+if __name__ == '__main__':
+    def unit_test():
+        glan = GLAN4MHT()
+        mat = np.array([[0, 1, 3],
+                        [1, 2, 1],
+                        [3, 0, 1]])
+        rows, cols = glan.infer(mat)
+        print(rows, cols)
+
+    unit_test()
