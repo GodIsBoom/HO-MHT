@@ -2,7 +2,7 @@ import torch
 import time
 from torch.nn import Sequential as Seq, Linear as Lin,LayerNorm, ReLU,Sigmoid,Tanh,LeakyReLU,BatchNorm1d
 from torch_scatter import scatter_mean,scatter_max,scatter_min
-from myMetaLayer import MetaLayer
+from .myMetaLayer import MetaLayer
 
 class GlobalNorm(torch.nn.Module):
     def __init__(self):

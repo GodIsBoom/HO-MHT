@@ -4,13 +4,31 @@ import sys
 import numpy as np
 #from copy import copy, deepcopy
 from scipy.optimize import linear_sum_assignment
+from .glan.glan_deploy import GLAN4MHT
 ###################
 INF = 10**9
+glan = GLAN4MHT()
 def Hungarian(matrix):
     """最大图匹配"""
-    rows_idx, cols_idx = linear_sum_assignment(matrix)
+    # rows_idx, cols_idx = linear_sum_assignment(matrix)
+    # 获取矩阵的行数和列数
+    n, m = matrix.shape
+    
+    # 方阵的维度是行数和列数中较小的那个
+    size = min(n, m)
+    
+    # 计算每列的总和
+    column_sums = np.sum(matrix, axis=0)
+    
+    # 获取总和最小的size个列的索引
+    smallest_columns_indices = np.argsort(column_sums)[:size]
+    
+    # 根据这些列索引来截断矩阵
+    truncated_matrix = matrix[:, smallest_columns_indices]
+    rows_idx, cols_idx = glan.infer(truncated_matrix)
     cost = matrix[rows_idx, cols_idx].sum()
     #assign = [[x,y] for x,y in zip(rows_idx,cols_idx)]
+    # print("debug: ", matrix.shape, rows_idx.shape, cols_idx.shape)
     return cols_idx, cost
 
 def MurtyPartition(N, a, type):

@@ -1,4 +1,4 @@
-import argparse
+import sys
 from os.path import realpath, dirname
 import torch
 import os
@@ -6,7 +6,7 @@ import numpy as np
 from torch_geometric.data import Data,Dataset
 from torch_geometric.loader import DataLoader
 
-from GNBlock import _Model
+from .GNBlock import _Model
 
 torch.set_grad_enabled(False)
 
@@ -103,7 +103,7 @@ class MatrixRealData(Dataset):
 
 class GLAN4MHT():
     def __init__(self) -> None:
-        self.model_file = "./glan/glan4mht.pth"
+        self.model_file = "./murty/glan/glan4mht.pth"
         self.model = _Model(layer_num = 5, edge_dim = 16, node_dim = 8)
         self.model.load_state_dict(torch.load(self.model_file))
         self.model.cuda()
