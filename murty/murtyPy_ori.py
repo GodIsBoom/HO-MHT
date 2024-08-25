@@ -4,22 +4,12 @@ import sys
 import numpy as np
 #from copy import copy, deepcopy
 from scipy.optimize import linear_sum_assignment
-from glan.glan_deploy import GLAN4MHT
 ###################
-INF = 10**3
-glan = GLAN4MHT()
+INF = 10**9
 def Hungarian(matrix):
     """最大图匹配"""
-    # rows_idx, cols_idx = linear_sum_assignment(matrix)
-    # 获取矩阵的行数和列数
-    n, m = matrix.shape
-    
-    # 方阵的维度是行数和列数中较小的那个
-    k = min(n, m)
+    rows_idx, cols_idx = linear_sum_assignment(matrix)
 
-    # 根据这些列索引来截断矩阵
-    square_matrix = matrix[:k, :k]
-    rows_idx, cols_idx = glan.infer(square_matrix)
     cost = matrix[rows_idx, cols_idx].sum()
     #assign = [[x,y] for x,y in zip(rows_idx,cols_idx)]
     # print("debug: ", matrix.shape, rows_idx.shape, cols_idx.shape)

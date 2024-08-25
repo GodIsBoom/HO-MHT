@@ -103,7 +103,7 @@ class MatrixRealData(Dataset):
 
 class GLAN4MHT():
     def __init__(self) -> None:
-        self.model_file = "./murty/glan/glan4mht.pth"
+        self.model_file = "./glan/glan4mht.pth"
         self.model = _Model(layer_num = 5, edge_dim = 16, node_dim = 8)
         self.model.load_state_dict(torch.load(self.model_file))
         self.model.cuda()
