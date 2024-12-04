@@ -51,7 +51,8 @@ class CostMatrix:#m-best MHT中的假设矩阵用成本矩阵表示
         # for _ in range(int(max_nof_solutions)):
         #     is_ok, sum_cost, track_to_det = murty_solver.draw()
         for track_to_det,sum_cost in murty(self._matrix,int(max_nof_solutions)):
-            track_to_det = track_to_det.tolist()#Here, the index stands for track(row) and det stand for detection(meas/col)
+            # track_to_det = track_to_det.tolist()#Here, the index stands for track(row) and det stand for detection(meas/col)
+            track_to_det = list(track_to_det)
             #is_ok:murty算法能否找到第i优分配(is_ok),分配的总成本(sum_cost),以及索引和分配(track_to_detection)
             # if not is_ok:#没有最优分配,返回None
             #     return None

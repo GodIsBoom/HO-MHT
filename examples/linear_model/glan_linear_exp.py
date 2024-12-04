@@ -56,7 +56,7 @@ nof_rounds = 1#Monte Carlo
 Init_Stat = np.random.multivariate_normal(init_mean, init_cov)
 Init_Stat2 = np.random.multivariate_normal(init_mean2, init_cov2)
 Init_Stat3 = np.random.multivariate_normal(init_mean3, init_cov3)
-targetNum = 5
+targetNum = 100
 simEndTime = 500
 Init_Stat_list = []
 for i in range(targetNum):
@@ -66,15 +66,15 @@ for i in range(targetNum):
     Init_Stat_list.append(Init_Stat_temp)
 
 Init_time = np.random.randint(1, 200, targetNum)
-# Death_time = Init_time + np.random.randint(50, 800, targetNum)
-Death_time = [500 for _ in range(targetNum)]
+Death_time = Init_time + np.random.randint(100, 300, targetNum)
+# Death_time = [500 for _ in range(targetNum)]
 
 """ M.C. """
 for i in range(nof_rounds):
     """Get tracker,ground_truth and measurements"""
     end_time_eachMC = 500
     tracker = Tracker(
-        max_nof_hyps = 6,
+        max_nof_hyps = 1,
         hyp_weight_threshold = np.log(0.05),
     )#跟踪器:_M=10,即m-best为10; 假设的权重阈值为ln(0.05)
     #P_survival: the const. prob. is used to model the object death time,i.e survival time.

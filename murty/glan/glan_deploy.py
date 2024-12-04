@@ -103,7 +103,7 @@ class MatrixRealData(Dataset):
 
 class GLAN4MHT():
     def __init__(self) -> None:
-        self.model_file = "./glan/glan4mht.pth"
+        self.model_file = "./murty/glan/glan4mht.pth"
         self.model = _Model(layer_num = 5, edge_dim = 16, node_dim = 8)
         self.model.load_state_dict(torch.load(self.model_file))
         self.model.cuda()
@@ -151,10 +151,8 @@ class GLAN4MHT():
 if __name__ == '__main__':
     def unit_test():
         glan = GLAN4MHT()
-        mat = np.array([[0, 1, 3],
-                        [1, 2, 1],
-                        [3, 0, 1]])
-        rows, cols = glan.infer(mat)
+        costMat = np.loadtxt("input.test")
+        rows, cols = glan.infer(costMat)
         print(rows, cols)
 
     unit_test()

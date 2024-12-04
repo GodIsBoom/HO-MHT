@@ -244,6 +244,8 @@ class Tracker:
                                 lhyps_from_gates = track_updates[trid][lid]#OrderDict({z_idx:LocalHypothesis})
                                 detection = assignment[trid]#detection_id
                                 lhyp = lhyps_from_gates[detection]#LocalHypothesis
+                                if lhyp == None:
+                                    continue
                                 new_ghyp[trid] = lhyp.id()
                                 self.tracks[trid].add(lhyp)#Track中添加lhyp,使用Track.add(lhyp)
                             else:
